@@ -1,0 +1,51 @@
+Writeup - Delphi.
+
+Challenge Description
+These modern day shamans have created a website, can you learn their secret and be able to use magic yourself?
+The website is a terminal-based interface with a command called "oracle" that asks for a secret.
+The hint says the secret is only lowercase letters and underscores.
+
+Solution
+Step 1: Analyze the website
+The website presents a terminal interface with the following commands:
+- `hello` - Prints "Hello, world!".
+- `amicool` - Tells you if you're cool.
+- `clue` - Gives a hint (not useful).
+- `oracle` - Asks for a secret and returns a prophecy if correct.
+When running the `oracle` command, it POSTs to `/secret` endpoint with the parameter `secret`.
+
+Step 2: Test the endpoint
+I tested the `/secret` endpoint with various inputs:
+- "magic" -> "Something's missing...".
+- "prophecy" -> "Wrong secret :(".
+- Other words -> "Wrong secret :(".
+
+Step 3: Brute force character by character
+The key insight is that the response changes based on whether our prefix is correct:
+- If the prefix is correct: response is different (not "Wrong secret :(").
+- If the prefix is wrong: response is "Wrong secret :(".
+
+Using this, I brute forced the secret character by character:
+- Position 0: 'm'
+- Position 1: 'a'
+- Position 2: 'g'
+- Position 3: 'i'
+- Position 4: 'c'
+- Position 5: '_'
+- Position 6: 'i'
+- Position 7: 's'
+- Position 8: '_'
+- Position 9: 'f'
+- Position 10: 'a'
+- Position 11: 'k'
+- Position 12: 'e'
+The secret is: magic_is_fake
+
+Step 4: Get the flag
+When we send the correct secret to the oracle, we receive:
+"Here's the prophecy, I forecast some points for you :) ptm{l3t5_g0_t0_gr33c3}"
+
+Flag:
+`ptm{l3t5_g0_t0_gr33c3}`
+Files:
+- `solve.py` - Python script that brute forces the secret.
